@@ -6,11 +6,12 @@ const createUserTable = () => {
     const createTableQuery = `
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT,
-            uuid VARCHAR(255) NOT NULL,
+            uuid VARCHAR(255) NOT NULL UNIQUE,
+            insID VARCHAR(255) NOT NULL UNIQUE,
             name VARCHAR(30) NOT NULL,
             username VARCHAR(255) PRIMARY KEY,
             email VARCHAR(255) NOT NULL UNIQUE,
-            mobile VARCHAR(10) NOT NULL UNIQUE,
+            mobile VARCHAR(15) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             avatar BLOB,
             source TEXT(25) DEFAULT 'Manual',

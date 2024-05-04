@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
-const db = require("../../config/db");
-const { createUserTable } = require('../../Models/User')
+const db = require("../../../config/db");
+const { createUserTable } = require('../../../Models/User')
 const { body, validationResult } = require("express-validator");
 const { v4: uuidv4 } = require('uuid'); 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 let JWT_SECRET = 'vortex$your_point@to!a-new%world^'
+
 
 router.post("/", [
     body('password','Minimum 8 characters required').isLength({min:8}),
@@ -21,9 +22,7 @@ router.post("/", [
     try {
         const sql = "SELECT * FROM users WHERE (`email` = ?)";
         db.query(sql, [req.body.username], async (err,result)=>{
-            console.log(err)
             if(err) return res.json({message: "You're not yet registered, please signup first."});
-            console.log(result[0])
             
             if(result.length > 0){
                 const salt = await bcrypt.genSalt(10);
@@ -33,9 +32,7 @@ router.post("/", [
                     req.body.username,
                 ]
                 db.query(sql, values, (err,result)=>{
-                    console.log(err)
                     if(err) return res.json({message: "Unable to reset password, try again."});
-                    console.log(result)
                     
                     return res.json({message: "Password reset successful, please login."});
                 });
@@ -44,7 +41,6 @@ router.post("/", [
             }
         })
     }catch (error) {
-        console.error(error.message);
         res.send("Internal Server Error");
     }
 })
